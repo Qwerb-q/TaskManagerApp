@@ -1,3 +1,7 @@
 <Solution>
-  <Project Path="TaskManagerApp/TaskManagerApp.csproj" />
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="TaskManagerApp/TaskManagerApp.csproj" Id="1974d5d8-09e0-401d-869a-34234c7e8ebd" />
+  <Project Path="TaskManagerAppTests/TaskManagerAppTests.csproj" Id="10c84f67-fae5-4cc6-99ab-1f28ff6e9b36" />
 </Solution>
