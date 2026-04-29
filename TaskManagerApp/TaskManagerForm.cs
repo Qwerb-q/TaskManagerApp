@@ -68,7 +68,7 @@ public class TaskManagerForm : Form
         tasksListBox.Items.Clear();
         foreach (var task in taskManager.Tasks)
         {
-            tasksListBox.Items.Add($"{(task.IsCompleted ? "[X]" : "[ )")} {task.Description}");
+            tasksListBox.Items.Add($"{(task.IsCompleted ? "[X]" : "[ ]")} {task.Description}");
         }
     }
 
