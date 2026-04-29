@@ -18,7 +18,7 @@ public class TaskManager
     {
         if (string.IsNullOrEmpty(description))
         {
-            throw new ArgumentException("Описание задачи不能为空.");
+            throw new ArgumentException("Описание задачи.");
         }
         Tasks.Add(new Task(description));
         SaveTasks();
