@@ -147,5 +147,79 @@ namespace TaskManagerApp.Tests
             Assert.IsNotNull(tasks);
             Assert.AreEqual(1, tasks.Count);
         }
+
+        [TestMethod]
+        public void Test_File_Content_Persistence_And_Restore()
+        {
+            var manager1 = new TaskManager();
+            manager1.AddTask("Задача 1");
+            manager1.ToggleTaskCompletion(0);
+            manager1.AddTask("Задача 2");
+
+            var manager2 = new TaskManager();
+
+            Assert.AreEqual(2, manager2.Tasks.Count, "Количество задач не совпадает после перезагрузки");
+            Assert.AreEqual("Задача 1", manager2.Tasks[0].Description);
+            Assert.IsTrue(manager2.Tasks[0].IsCompleted, "Статус первой задачи должен быть True");
+            Assert.AreEqual("Задача 2", manager2.Tasks[1].Description);
+            Assert.IsFalse(manager2.Tasks[1].IsCompleted, "Статус второй задачи должен быть False");
+        }
+
+        [TestMethod]
+        public void Test_File_Creation_On_First_Add()
+        {
+            if (File.Exists(TestFilePath)) File.Delete(TestFilePath);
+
+            var manager = new TaskManager();
+            Assert.IsFalse(File.Exists(TestFilePath), "Файл не должен существовать до добавления задач");
+
+            manager.AddTask("Новая задача");
+            Assert.IsTrue(File.Exists(TestFilePath), "Файл должен появиться после добавления задачи");
+        }
+
+        [TestMethod]
+        public void Test_File_IsValidTextFile()
+        {
+            var manager = new TaskManager();
+            manager.AddTask("Текстовая проверка");
+
+            Assert.IsTrue(File.Exists(TestFilePath), "Файл tasks.txt не был создан.");
+
+            string fileName = Path.GetFileName(TestFilePath);
+            Assert.IsTrue(fileName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase),
+                $"Файл должен иметь расширение .txt, но получено: {fileName}");
+
+            try
+            {
+                string content = File.ReadAllText(TestFilePath);
+
+                Assert.IsFalse(string.IsNullOrEmpty(content), "Файл пуст, хотя задача была добавлена.");
+
+                Assert.IsTrue(content.Contains("False") || content.Contains("True"),
+                    "Файл не содержит булевых значений статуса задачи.");
+                Assert.IsTrue(content.Contains("Текстовая проверка"),
+                    "Файл не содержит описания добавленной задачи.");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Не удалось прочитать файл как текст. Возможно, файл поврежден или не является текстовым. Ошибка: {ex.Message}");
+            }
+        }
+
+        [TestMethod]
+        public void Test_File_Format_IsCorrect()
+        {
+            var manager = new TaskManager();
+            manager.AddTask("Проверка формата");
+
+            string fileContent = File.ReadAllText(TestFilePath);
+
+            Assert.IsTrue(fileContent.Contains("\t"), "Файл не содержит символ табуляции (\\t)");
+
+            bool startsWithFalse = fileContent.StartsWith("False\t");
+            bool startsWithTrue = fileContent.StartsWith("True\t");
+
+            Assert.IsTrue(startsWithFalse || startsWithTrue, $"Неправильный формат начала строки. Ожидается 'False\\t' или 'True\\t'. Реальное начало: '{fileContent.Substring(0, Math.Min(10, fileContent.Length))}'");
+        }
     }
 }

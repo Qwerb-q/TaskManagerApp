@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 public class TaskManagerForm : Form
 {
@@ -14,42 +15,50 @@ public class TaskManagerForm : Form
     {
         this.Text = "Управление задачами";
         this.Width = 400;
-        this.Height = 400;
+        this.Height = 300;
+        this.BackColor = Color.PowderBlue;
 
         tasksListBox = new ListBox
         {
-            Location = new System.Drawing.Point(10, 10),
+            Location = new Point(10, 10),
             Width = 200,
-            Height = 200
+            Height = 200,
+            BorderStyle = BorderStyle.Fixed3D
         };
 
         descriptionTextBox = new TextBox
         {
-            Location = new System.Drawing.Point(220, 10),
+            Location = new Point(220, 10),
             Width = 150
         };
 
         addTaskButton = new Button
         {
-            Location = new System.Drawing.Point(220, 40),
+            Location = new Point(220, 40),
             Text = "Добавить",
-            Width = 70
+            Width = 70,
+            Height = 35,
+            BackColor = Color.Wheat
         };
         addTaskButton.Click += AddTaskButton_Click;
 
         removeTaskButton = new Button
         {
-            Location = new System.Drawing.Point(300, 40),
+            Location = new Point(300, 40),
             Text = "Удалить",
-            Width = 70
+            Width = 70,
+            Height = 35,
+            BackColor = Color.Wheat
         };
         removeTaskButton.Click += RemoveTaskButton_Click;
 
         toggleCompletionButton = new Button
         {
-            Location = new System.Drawing.Point(220, 70),
+            Location = new Point(220, 85),
             Text = "Отметить",
-            Width = 150
+            Width = 150,
+            Height = 35,
+            BackColor = Color.Wheat
         };
         toggleCompletionButton.Click += ToggleCompletionButton_Click;
 
@@ -80,9 +89,13 @@ public class TaskManagerForm : Form
             descriptionTextBox.Clear();
             UpdateTasksList();
         }
+        catch (ArgumentException ex)
+        {
+            MessageBox.Show(this, ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message);
+            MessageBox.Show(this, ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -90,7 +103,7 @@ public class TaskManagerForm : Form
     {
         if (tasksListBox.SelectedIndex == -1)
         {
-            MessageBox.Show("Выберите задачу для удаления!");
+            MessageBox.Show(this, "Выберите задачу для удаления!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
         try
@@ -100,7 +113,7 @@ public class TaskManagerForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message);
+            MessageBox.Show(this, ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -108,7 +121,7 @@ public class TaskManagerForm : Form
     {
         if (tasksListBox.SelectedIndex == -1)
         {
-            MessageBox.Show("Выберите задачу для изменения статуса!");
+            MessageBox.Show(this, "Выберите задачу для изменения статуса!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
         try
@@ -118,7 +131,28 @@ public class TaskManagerForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message);
+            MessageBox.Show(this, ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+    }
+
+    private void InitializeComponent()
+    {
+            this.SuspendLayout();
+            // 
+            // TaskManagerForm
+            // 
+            this.BackColor = System.Drawing.Color.PowderBlue;
+            this.ClientSize = new System.Drawing.Size(282, 253);
+            this.Font = new System.Drawing.Font("Palatino Linotype", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.Name = "TaskManagerForm";
+            this.Load += new System.EventHandler(this.TaskManagerForm_Load);
+            this.ResumeLayout(false);
+
+    }
+
+    private void TaskManagerForm_Load(object sender, EventArgs e)
+    {
+
     }
 }
