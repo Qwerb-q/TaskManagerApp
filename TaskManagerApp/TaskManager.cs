@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 public class TaskManager
 {
     public List<Task> Tasks { get; private set; }
+    private const string FileName = "tasks.txt";
 
     public TaskManager()
     {
@@ -16,9 +17,9 @@ public class TaskManager
 
     public void AddTask(string description)
     {
-        if (string.IsNullOrEmpty(description))
+        if (string.IsNullOrWhiteSpace(description))
         {
-            throw new ArgumentException("Описание задачи.");
+            throw new ArgumentException("Описание задачи не может быть пустым.");
         }
         Tasks.Add(new Task(description));
         SaveTasks();
@@ -46,23 +47,34 @@ public class TaskManager
 
     private void SaveTasks()
     {
-        File.WriteAllLines("tasks.txt", Tasks.Select(t => $"{t.IsCompleted}|{t.Description}"));
+        var lines = Tasks.Select(t => $"{t.IsCompleted}\t{t.Description}");
+        File.WriteAllLines(FileName, lines);
     }
 
     private void LoadTasks()
     {
-        if (File.Exists("tasks.txt"))
+        if (File.Exists(FileName))
         {
-            var lines = File.ReadAllLines("tasks.txt");
-            foreach (var line in lines)
+            try
             {
-                var parts = line.Split('|');
-                if (parts.Length == 2)
+                var lines = File.ReadAllLines(FileName);
+                foreach (var line in lines)
                 {
-                    bool isCompleted = bool.Parse(parts[0]);
-                    string description = parts[1];
-                    Tasks.Add(new Task(description) { IsCompleted = isCompleted });
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+
+                    var parts = line.Split(new[] { '\t' }, 2, StringSplitOptions.None);
+                    if (parts.Length == 2)
+                    {
+                        if (bool.TryParse(parts[0], out bool isCompleted))
+                        {
+                            Tasks.Add(new Task(parts[1]) { IsCompleted = isCompleted });
+                        }
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                Tasks = new List<Task>();
             }
         }
     }
