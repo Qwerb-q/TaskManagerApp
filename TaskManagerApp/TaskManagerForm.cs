@@ -15,26 +15,42 @@ public class TaskManagerForm : Form
     {
         this.Text = "Управление задачами";
         this.Width = 400;
-        this.Height = 300;
+        this.Height = 350;
         this.BackColor = Color.PowderBlue;
+
+        Label listLabel = new Label
+        {
+            Text = "Список задач:",
+            Location = new Point(10, 10),
+            AutoSize = true,
+            Font = new Font(this.Font, FontStyle.Bold)
+        };
 
         tasksListBox = new ListBox
         {
-            Location = new Point(10, 10),
+            Location = new Point(10, 30),
             Width = 200,
-            Height = 200,
+            Height = 250,
             BorderStyle = BorderStyle.Fixed3D
+        };
+
+        Label inputLabel = new Label
+        {
+            Text = "Новая задача:",
+            Location = new Point(220, 10),
+            AutoSize = true,
+            Font = new Font(this.Font, FontStyle.Bold)
         };
 
         descriptionTextBox = new TextBox
         {
-            Location = new Point(220, 10),
+            Location = new Point(220, 30),
             Width = 150
         };
 
         addTaskButton = new Button
         {
-            Location = new Point(220, 40),
+            Location = new Point(220, 60),
             Text = "Добавить",
             Width = 70,
             Height = 35,
@@ -44,7 +60,7 @@ public class TaskManagerForm : Form
 
         removeTaskButton = new Button
         {
-            Location = new Point(300, 40),
+            Location = new Point(300, 60),
             Text = "Удалить",
             Width = 70,
             Height = 35,
@@ -54,7 +70,7 @@ public class TaskManagerForm : Form
 
         toggleCompletionButton = new Button
         {
-            Location = new Point(220, 85),
+            Location = new Point(220, 105),
             Text = "Отметить",
             Width = 150,
             Height = 35,
@@ -62,6 +78,8 @@ public class TaskManagerForm : Form
         };
         toggleCompletionButton.Click += ToggleCompletionButton_Click;
 
+        this.Controls.Add(listLabel);
+        this.Controls.Add(inputLabel);
         this.Controls.Add(tasksListBox);
         this.Controls.Add(descriptionTextBox);
         this.Controls.Add(addTaskButton);
@@ -133,26 +151,5 @@ public class TaskManagerForm : Form
         {
             MessageBox.Show(this, ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-    }
-
-    private void InitializeComponent()
-    {
-            this.SuspendLayout();
-            // 
-            // TaskManagerForm
-            // 
-            this.BackColor = System.Drawing.Color.PowderBlue;
-            this.ClientSize = new System.Drawing.Size(282, 253);
-            this.Font = new System.Drawing.Font("Palatino Linotype", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.Name = "TaskManagerForm";
-            this.Load += new System.EventHandler(this.TaskManagerForm_Load);
-            this.ResumeLayout(false);
-
-    }
-
-    private void TaskManagerForm_Load(object sender, EventArgs e)
-    {
-
     }
 }
